@@ -6,6 +6,7 @@
 #ifndef __MT76_H
 #define __MT76_H
 
+#include <linux/version.h>
 #include <linux/kernel.h>
 #include <linux/io.h>
 #include <linux/spinlock.h>
@@ -25,6 +26,17 @@
 #include <net/page_pool.h>
 #else
 #include <net/page_pool/helpers.h>
+#endif
+#ifndef ieee80211_txq_aql_pending
+static inline bool
+mt76_ieee80211_txq_aql_pending(struct ieee80211_hw *hw, struct ieee80211_txq *txq)
+{
+	unsigned long frame_cnt, byte_cnt;
+
+	ieee80211_txq_get_depth(txq, &frame_cnt, &byte_cnt);
+	return frame_cnt || byte_cnt;
+}
+#define ieee80211_txq_aql_pending mt76_ieee80211_txq_aql_pending
 #endif
 #include "util.h"
 #include "testmode.h"

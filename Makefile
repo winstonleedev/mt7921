@@ -1,4 +1,14 @@
 # SPDX-License-Identifier: BSD-3-Clause-Clear
+ifneq ($(filter y m,$(CONFIG_MT7921_COMMON)),)
+CONFIG_MT792x_LIB = m
+CONFIG_MT76_CONNAC_LIB = m
+endif
+
+ifneq ($(filter y m,$(CONFIG_MT7921U)),)
+CONFIG_MT792x_USB = m
+CONFIG_MT76_USB = m
+endif
+
 ccflags-y += -Werror -DCONFIG_MT76_LEDS
 obj-m := mt76.o
 obj-$(CONFIG_MT76_USB) += mt76-usb.o
